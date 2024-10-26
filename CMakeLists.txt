@@ -9,6 +9,7 @@ set(CMAKE_CXX_STANDARD 20)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
 include_directories(include)
+find_library(MATH_LIBRARY m REQUIRED)
 
 set(MUSIALIZER_SOURCES
   ${CMAKE_CURRENT_SOURCE_DIR}/src/musializer.c
@@ -18,6 +19,11 @@ set(PLUGIN_SOURCES
   ${CMAKE_CURRENT_SOURCE_DIR}/src/plugin.c
   )
 
+set(SINE_WAVE_COMPARE_SOURCES
+  ${CMAKE_CURRENT_SOURCE_DIR}/src/sine_wave_compare.c
+  )
+
+
 add_library(plugin SHARED)
 target_sources(plugin
  PRIVATE
@@ -26,9 +32,11 @@ target_sources(plugin
 target_include_directories(plugin
  PRIVATE
   ${raylib_INCLUDE_DIRS}
+  ${FFTW3_INCLUDE_DIRS}
 )
 target_link_libraries(plugin
   ${raylib_LIBRARIES}
+  ${SDL2_LIBRARIES}
 )
 
 
@@ -42,5 +50,20 @@ target_include_directories(musializer
   ${raylib_INCLUDE_DIRS}
 )
 target_link_libraries(musializer
+  ${raylib_LIBRARIES}
+)
+
+add_executable(sine_wave_compare)
+target_sources(sine_wave_compare
+ PRIVATE
+  ${SINE_WAVE_COMPARE_SOURCES}
+)
+target_include_directories(sine_wave_compare
+ PRIVATE
+  ${raylib_INCLUDE_DIRS}
+)
+target_link_libraries(sine_wave_compare
+ PUBLIC
+  ${MATH_LIBRARY}
   ${raylib_LIBRARIES}
 )
