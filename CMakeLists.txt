@@ -19,6 +19,10 @@ set(PLUGIN_SOURCES
   ${CMAKE_CURRENT_SOURCE_DIR}/src/plugin.c
   )
 
+set(SPECTRUM_PLUGIN_SOURCES
+  ${CMAKE_CURRENT_SOURCE_DIR}/src/spectrum_plugin.c
+  )
+
 set(SINE_WAVE_COMPARE_SOURCES
   ${CMAKE_CURRENT_SOURCE_DIR}/src/sine_wave_compare.c
   )
@@ -36,9 +40,21 @@ target_include_directories(plugin
 )
 target_link_libraries(plugin
   ${raylib_LIBRARIES}
-  ${SDL2_LIBRARIES}
 )
 
+add_library(spectrum_plugin SHARED)
+target_sources(spectrum_plugin
+ PRIVATE
+  ${SPECTRUM_PLUGIN_SOURCES}
+)
+target_include_directories(spectrum_plugin
+ PRIVATE
+  ${raylib_INCLUDE_DIRS}
+  ${FFTW3_INCLUDE_DIRS}
+)
+target_link_libraries(spectrum_plugin
+  ${raylib_LIBRARIES}
+)
 
 add_executable(musializer)
 target_sources(musializer
