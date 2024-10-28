@@ -19,14 +19,17 @@ set(PLUGIN_SOURCES
   ${CMAKE_CURRENT_SOURCE_DIR}/src/plugin.c
   )
 
-set(SPECTRUM_PLUGIN_SOURCES
+set(BASE_PLUGIN_SOURCES
+  ${CMAKE_CURRENT_SOURCE_DIR}/src/base_plugin.c
+  )
+
+  set(SPECTRUM_PLUGIN_SOURCES
   ${CMAKE_CURRENT_SOURCE_DIR}/src/spectrum_plugin.c
   )
 
 set(SINE_WAVE_COMPARE_SOURCES
   ${CMAKE_CURRENT_SOURCE_DIR}/src/sine_wave_compare.c
   )
-
 
 add_library(plugin SHARED)
 target_sources(plugin
@@ -39,6 +42,20 @@ target_include_directories(plugin
   ${FFTW3_INCLUDE_DIRS}
 )
 target_link_libraries(plugin
+  ${raylib_LIBRARIES}
+)
+
+add_library(base_plugin SHARED)
+target_sources(base_plugin
+ PRIVATE
+  ${BASE_PLUGIN_SOURCES}
+)
+target_include_directories(base_plugin
+ PRIVATE
+  ${raylib_INCLUDE_DIRS}
+  ${FFTW3_INCLUDE_DIRS}
+)
+target_link_libraries(base_plugin
   ${raylib_LIBRARIES}
 )
 
