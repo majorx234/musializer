@@ -23,7 +23,7 @@ set(BASE_PLUGIN_SOURCES
   ${CMAKE_CURRENT_SOURCE_DIR}/src/base_plugin.c
   )
 
-  set(SPECTRUM_PLUGIN_SOURCES
+set(SPECTRUM_PLUGIN_SOURCES
   ${CMAKE_CURRENT_SOURCE_DIR}/src/spectrum_plugin.c
   )
 
