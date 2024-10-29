@@ -22,4 +22,5 @@ void visual_plugin_update(void *plugin) {}
 void visual_plugin_load_files(FilePathList file_path_list) {}
 
 void visual_plugin_close(void* plugin) {
+  free(plugin);
 }
