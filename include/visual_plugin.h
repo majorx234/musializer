@@ -10,7 +10,7 @@
   VISUAL_PLUGIN(visual_plugin_post_reload, void, void*) \
   VISUAL_PLUGIN(visual_plugin_update, void, void*) \
   VISUAL_PLUGIN(visual_plugin_load_files, void, void*, FilePathList) \
-  VISUAL_PLUGIN(visual_plugin_close, void*) \
+  VISUAL_PLUGIN(visual_plugin_close, void*, void*) \
 
 #define VISUAL_PLUGIN(name, ret, ...) typedef ret (name##_t)(__VA_ARGS__);
 LIST_OF_PLUGIN_FUNCTIONS

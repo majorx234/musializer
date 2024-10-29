@@ -13,7 +13,7 @@ typedef struct VisualPluginFunctions {
   #undef VISUAL_PLUGIN
 } VisualPluginFunctions;
 
-bool load_plugin(void** libplugin, char* plugin_path, VisualPluginFunctions* visual_plugin_functions){
+bool load_plugin(void** libplugin, const char* plugin_path, VisualPluginFunctions* visual_plugin_functions){
   if(*libplugin != NULL) dlclose(libplugin);
 
   // TODO check plugin_path to be valid
@@ -39,6 +39,7 @@ bool load_plugin(void** libplugin, char* plugin_path, VisualPluginFunctions* vis
 int main(int argc, char **argv){
   char* plugin_path;
   void* libplugin = NULL;
+  void* plugin_state = NULL;
 
   VisualPluginFunctions visual_plugin_functions = {0};
 
@@ -52,6 +53,10 @@ int main(int argc, char **argv){
   SetTargetFPS(60);
   InitAudioDevice();
   const char *libplugin_file_name = "libplug.so";
+  // load base plugin for testing
+  load_plugin(&libplugin, libplugin_file_name, &visual_plugin_functions);
+  plugin_state = visual_plugin_functions.visual_plugin_init();
+
   while(!WindowShouldClose()){
     if(IsFileDropped()) {
       FilePathList dropped_files = LoadDroppedFiles();
@@ -66,8 +71,12 @@ int main(int argc, char **argv){
             plugin_path = (char*)malloc(len * (sizeof(char)));
             strcpy(plugin_path, dropped_files.paths[0]);
             // TODO: reload plugin
+            visual_plugin_functions.visual_plugin_post_reload(plugin_state);
+            load_plugin(&libplugin, plugin_path, &visual_plugin_functions);
+            visual_plugin_functions.visual_plugin_post_reload(plugin_state);
           }
         }
+        // when lib plugin is loaded load music files
         if(libplugin) {
           visual_plugin_functions.visual_plugin_load_files(libplugin, dropped_files);
         }
@@ -76,5 +85,6 @@ int main(int argc, char **argv){
       }
     }
   }
+  visual_plugin_functions.visual_plugin_close(plugin_state);
   return 0;
 }
