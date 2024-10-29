@@ -10,7 +10,7 @@
 typedef struct VisualPluginFunctions {
   #define VISUAL_PLUGIN(name, ...) name##_t *name;
   LIST_OF_PLUGIN_FUNCTIONS
-  #undef PLUG
+  #undef VISUAL_PLUGIN
 } VisualPluginFunctions;
 
 bool load_plugin(void** libplugin, char* plugin_path, VisualPluginFunctions* visual_plugin_functions){
@@ -23,15 +23,16 @@ bool load_plugin(void** libplugin, char* plugin_path, VisualPluginFunctions* vis
     return false;
   }
 
-  #define LOAD_PLUGIN_FUNCTIONS_FROM_LIB(name, ...) \
-    visual_plugin_functions.##name = dlsym(libplug, #name); \
-    if (visual_plugin_functions.##name == NULL) { \
+  #define VISUAL_PLUGIN(name, ...) \
+    visual_plugin_functions->name = dlsym(*libplugin, #name); \
+    if (visual_plugin_functions->name == NULL) { \
       fprintf(stderr, "ERROR: could not find %s symbol in %s: %s", \
-        visual_plugin_functions.##name, libplug_file_name, dlerror()); \
+        visual_plugin_functions->name, plugin_path, dlerror()); \
       return false; \
     }
     LIST_OF_PLUGIN_FUNCTIONS
-  #undef LOAD_PLUGIN_FUNCTIONS_FROM_LIB
+  #undef VISUAL_PLUGIN
+
   return true;
 }
 
