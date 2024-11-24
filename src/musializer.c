@@ -52,7 +52,7 @@ int main(int argc, char **argv){
   InitWindow(800, 600, "Musializer");
   SetTargetFPS(60);
   InitAudioDevice();
-  const char *libplugin_file_name = "libplug.so";
+  const char *libplugin_file_name = "libbase_plugin.so";
   // load base plugin for testing
   load_plugin(&libplugin, libplugin_file_name, &visual_plugin_functions);
   plugin_state = visual_plugin_functions.visual_plugin_init();
